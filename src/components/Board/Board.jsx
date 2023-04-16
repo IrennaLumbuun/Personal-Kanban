@@ -3,10 +3,13 @@ import { DragDropContext } from "react-beautiful-dnd";
 import Column from "../Column/Column";
 
 export default function Board() {
-	// TODO: this should be a dicitonary instead.
-	// Where key = the id of the board.
-	const [todo, setTodo] = useState([]);
-	const [done, setDone] = useState([]);
+	const [tasks, setTasks] = useState({
+		1: [
+			{ id: "task1", title: "task with id 1" },
+			{ id: "task3", title: "task with id 3" },
+		],
+		2: [{ id: "task2", title: "task with id 2" }],
+	});
 
 	const handleDragEnd = ({ destination, source, draggableId }) => {
 		if (!source || !destination) return;
@@ -14,35 +17,35 @@ export default function Board() {
 		// but changed their mind and put such task back to its original column
 		if (source.droppableId === destination.droppableId) return;
 
-		// remove from source array, append to the destination array
-		if (source.droppableId == 2) {
-			setDone(removeItemById(draggableId, done));
-		} else {
-			setTodo(removeItemById(draggableId, todo));
-		}
+		// Update state of tasks
+		let modifieableTasks = { ...tasks };
+		modifieableTasks[source.droppableId] = removeItemById(
+			source.droppableId,
+			draggableId
+		);
+		const task = findItemById(draggableId);
+		modifieableTasks[destination.droppableId].push(task);
 
-		const task = findItemById(draggableId, [...todo, ...done]);
-		if (destination.droppableId == 2) {
-			setDone([{ task }, ...done]);
-		} else {
-			setTodo([{ task }, ...todo]);
+		setTasks(modifieableTasks);
+	};
+
+	const findItemById = (taskId) => {
+		for (const columnId in tasks) {
+			let task = tasks[columnId].find((item) => item.id === taskId);
+			if (task) return task;
 		}
 	};
 
-	const findItemById = (id, array) => {
-		return array.find((item) => item.id === id);
-	};
-
-	const removeItemById = (id, array) => {
-		return array.filter((item) => item.id !== id);
+	const removeItemById = (columnId, taskId) => {
+		return tasks[columnId].filter((item) => item.id !== taskId);
 	};
 
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
 			<h1> Board title </h1>
 			<div>
-				<Column title={"To Do"} tasks={todo} id={"1"} />
-				<Column title={"Done"} tasks={done} id={"2"} />
+				<Column title={"To Do"} tasks={tasks["1"]} id={"1"} />
+				<Column title={"Done"} tasks={tasks["2"]} id={"2"} />
 			</div>
 		</DragDropContext>
 	);
