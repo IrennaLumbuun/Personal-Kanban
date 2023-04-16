@@ -9,6 +9,9 @@ body {
 	background-size: auto;
 	background-repeat: no-repeat;
 	background-position: center;
+
+	/*For chrome extension*/
+	width: 800px;
 }
 
 code {
