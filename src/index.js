@@ -6,9 +6,10 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  // Removing StrictMode because we are using react-beautiful-dnd as a dependency
+  // react-beautiful-dnd is known to error out with stictmode
+  // e.g. https://github.com/atlassian/react-beautiful-dnd/issues/2350
+  <App />
 );
 
 // If you want to start measuring performance in your app, pass a function
