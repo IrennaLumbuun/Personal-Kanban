@@ -1,14 +1,38 @@
-import { Card, CardContent, Typography } from "@mui/material";
-import React from "react";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	IconButton,
+	TextField,
+	Typography,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckIcon from "@mui/icons-material/Check";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import "./Task.css";
 
 /**
  * Props:
- * - "task": object containing "id" and "title"
- * - "index": int is required by react-dnd
+ * - task: object containing "id" and "title"
+ * - index: int is required by react-dnd
+ * - columnId: The columnId where the task resides
+ * - setTasks: A function owned by "Board" that can modify the title of a task
+ * - tasks: All tasks in a board
  */
-export default function Task({ task, index }) {
+export default function Task({ task, index, columnId, setTasks, tasks }) {
+	const [inEditMode, setInEditMode] = useState(false);
+	const [taskTitle, setTaskTitle] = useState(task.title);
+
+	const deleteTask = (e) => {
+		e.preventDefault();
+		let modifieableTasks = { ...tasks };
+		modifieableTasks[columnId] = modifieableTasks[columnId].filter(
+			(item) => item.id !== task.id
+		);
+		setTasks(modifieableTasks);
+	};
 	return (
 		<Draggable draggableId={task.id.toString()} index={index}>
 			{(provided, snapshot) => (
@@ -20,17 +44,40 @@ export default function Task({ task, index }) {
 					{...provided.dragHandleProps}
 					isDragging={snapshot.isDragging}
 				>
+					<CardHeader
+						subheader={
+							<Typography
+								sx={{ fontSize: 14 }}
+								color="text.secondary"
+								gutterBottom
+							>
+								#{task.id}
+							</Typography>
+						}
+						action={
+							<div>
+								<IconButton onClick={() => setInEditMode(!inEditMode)}>
+									{inEditMode ? <CheckIcon /> : <EditIcon />}
+								</IconButton>
+								<IconButton onClick={deleteTask}>
+									<DeleteOutlineOutlinedIcon />
+								</IconButton>
+							</div>
+						}
+					/>
 					<CardContent>
-						<Typography
-							sx={{ fontSize: 14 }}
-							color="text.secondary"
-							gutterBottom
-						>
-							#{task.id}
-						</Typography>
-						<Typography variant="body" component="div">
-							{task.title}
-						</Typography>
+						{inEditMode ? (
+							<TextField
+								multiline
+								variant="standard"
+								value={taskTitle}
+								onChange={(e) => setTaskTitle(e.target.value)}
+							/>
+						) : (
+							<Typography variant="body" component="div" className="task-title">
+								{taskTitle}
+							</Typography>
+						)}
 					</CardContent>
 					{provided.placeholder}
 				</Card>

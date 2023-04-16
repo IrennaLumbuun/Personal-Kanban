@@ -53,17 +53,28 @@ export default function Board() {
 				className="board"
 			>
 				<Grid item xs={2} sm={4} md={4}>
-					<Column title={"To Do"} tasks={tasks["todo"]} id={"todo"} />
+					<Column
+						title={"To Do"}
+						columnId={"todo"}
+						setTasks={setTasks}
+						tasks={tasks}
+					/>
 				</Grid>
 				<Grid item xs={2} sm={4} md={4}>
 					<Column
 						title={"In Progress"}
-						tasks={tasks["inProgress"]}
-						id={"inProgress"}
+						columnId={"inProgress"}
+						setTasks={setTasks}
+						tasks={tasks}
 					/>
 				</Grid>
 				<Grid item xs={2} sm={4} md={4}>
-					<Column title={"Done"} tasks={tasks["done"]} id={"done"} />
+					<Column
+						title={"Done"}
+						columnId={"done"}
+						setTasks={setTasks}
+						tasks={tasks}
+					/>
 				</Grid>
 			</Grid>
 		</DragDropContext>
