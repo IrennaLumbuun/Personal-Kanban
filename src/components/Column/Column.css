@@ -3,8 +3,19 @@
 	-ms-overflow-style: none; /* for Internet Explorer, Edge */
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll;
+	background-color: rgba(240, 255, 255, 0.8);
+	border-radius: 10px;
+	padding: 1rem 0.5rem;
+}
+.column-title {
+	text-align: center;
 }
 
 .column::-webkit-scrollbar {
 	display: none; /* for Chrome, Safari, and Opera */
+}
+
+.column-task-list {
+	min-height: 100px;
+	margin-top: 1rem;
 }

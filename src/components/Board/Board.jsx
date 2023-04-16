@@ -1,14 +1,17 @@
+import { Grid } from "@mui/material";
 import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "../Column/Column";
+import "./Board.css";
 
 export default function Board() {
 	const [tasks, setTasks] = useState({
-		1: [
+		todo: [
 			{ id: "task1", title: "task with id 1" },
 			{ id: "task3", title: "task with id 3" },
 		],
-		2: [{ id: "task2", title: "task with id 2" }],
+		inProgress: [],
+		done: [{ id: "task2", title: "task with id 2" }],
 	});
 
 	const handleDragEnd = ({ destination, source, draggableId }) => {
@@ -42,11 +45,27 @@ export default function Board() {
 
 	return (
 		<DragDropContext onDragEnd={handleDragEnd}>
-			<h1> Board title </h1>
-			<div>
-				<Column title={"To Do"} tasks={tasks["1"]} id={"1"} />
-				<Column title={"Done"} tasks={tasks["2"]} id={"2"} />
-			</div>
+			<h1 className="board-title"> Irenna's Weekend Board </h1>
+			<Grid
+				container
+				spacing={{ xs: 2 }}
+				columns={{ xs: 4, sm: 8, md: 12 }}
+				className="board"
+			>
+				<Grid item xs={2} sm={4} md={4}>
+					<Column title={"To Do"} tasks={tasks["todo"]} id={"todo"} />
+				</Grid>
+				<Grid item xs={2} sm={4} md={4}>
+					<Column
+						title={"In Progress"}
+						tasks={tasks["inProgress"]}
+						id={"inProgress"}
+					/>
+				</Grid>
+				<Grid item xs={2} sm={4} md={4}>
+					<Column title={"Done"} tasks={tasks["done"]} id={"done"} />
+				</Grid>
+			</Grid>
 		</DragDropContext>
 	);
 }

@@ -1,3 +1,4 @@
+import { Container, Typography } from "@mui/material";
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import Task from "../Task/Task";
@@ -11,8 +12,10 @@ import "./Column.css";
  */
 export default function Column({ title, tasks, id }) {
 	return (
-		<div className="column">
-			<h1 className="column-title"> {title}</h1>
+		<Container className="column" spacing={1}>
+			<Typography variant="h5" component="div" className="column-title">
+				{title}
+			</Typography>
 			<Droppable droppableId={id}>
 				{
 					/* {
@@ -33,6 +36,6 @@ export default function Column({ title, tasks, id }) {
 					)
 				}
 			</Droppable>
-		</div>
+		</Container>
 	);
 }

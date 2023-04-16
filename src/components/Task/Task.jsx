@@ -1,5 +1,7 @@
+import { Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import "./Task.css";
 
 /**
  * Props:
@@ -10,25 +12,28 @@ export default function Task({ task, index }) {
 	return (
 		<Draggable draggableId={task.id.toString()} index={index}>
 			{(provided, snapshot) => (
-				<div
+				<Card
+					variant="outlined"
 					className="task-container"
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 					isDragging={snapshot.isDragging}
 				>
-					<div className="task-id">
-						<span>
-							<small> #{task.id}</small>
-						</span>
-					</div>
-					<div
-						style={{ display: "flex", justifyContent: "center", padding: 2 }}
-					>
-						<p>{task.title}</p>
-					</div>
+					<CardContent>
+						<Typography
+							sx={{ fontSize: 14 }}
+							color="text.secondary"
+							gutterBottom
+						>
+							#{task.id}
+						</Typography>
+						<Typography variant="body" component="div">
+							{task.title}
+						</Typography>
+					</CardContent>
 					{provided.placeholder}
-				</div>
+				</Card>
 			)}
 		</Draggable>
 	);
