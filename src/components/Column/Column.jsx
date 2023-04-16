@@ -8,6 +8,7 @@ import {
 	Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useCookies } from "react-cookie";
 import { Droppable } from "react-beautiful-dnd";
 import Task from "../Task/Task";
 import AddIcon from "@mui/icons-material/Add";
@@ -23,12 +24,14 @@ import { v4 as uuidv4 } from "uuid";
  */
 export default function Column({ title, columnId, setTasks, tasks }) {
 	const [newTaskTitle, setNewTaskTitle] = useState("");
+	const [cookies, setCookie] = useCookies(["Kanban"]);
 	const addTask = (e) => {
 		e.preventDefault();
 		let modifieableTasks = { ...tasks };
 		modifieableTasks[columnId].push({ id: uuidv4(), title: newTaskTitle });
 		setTasks(modifieableTasks);
 		setNewTaskTitle("");
+		setCookie("KanbanData", modifieableTasks);
 	};
 	return (
 		<Container className="column" spacing={1}>
@@ -45,7 +48,6 @@ export default function Column({ title, columnId, setTasks, tasks }) {
 							className="column-task-list"
 							ref={provided.innerRef}
 							{...provided.droppableProps}
-							isDraggingOver={snapshot.isDraggingOver}
 						>
 							{tasks[columnId].map((task, index) => (
 								<Task

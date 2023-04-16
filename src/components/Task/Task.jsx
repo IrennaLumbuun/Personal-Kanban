@@ -10,6 +10,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import React, { useState } from "react";
+import { useCookies } from "react-cookie";
 import { Draggable } from "react-beautiful-dnd";
 import "./Task.css";
 
@@ -24,6 +25,7 @@ import "./Task.css";
 export default function Task({ task, index, columnId, setTasks, tasks }) {
 	const [inEditMode, setInEditMode] = useState(false);
 	const [taskTitle, setTaskTitle] = useState(task.title);
+	const [cookies, setCookie] = useCookies(["Kanban"]);
 
 	const deleteTask = (e) => {
 		e.preventDefault();
@@ -32,6 +34,7 @@ export default function Task({ task, index, columnId, setTasks, tasks }) {
 			(item) => item.id !== task.id
 		);
 		setTasks(modifieableTasks);
+		setCookie("KanbanData", modifieableTasks);
 	};
 	return (
 		<Draggable draggableId={task.id.toString()} index={index}>
@@ -42,7 +45,6 @@ export default function Task({ task, index, columnId, setTasks, tasks }) {
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					isDragging={snapshot.isDragging}
 				>
 					<CardHeader
 						subheader={

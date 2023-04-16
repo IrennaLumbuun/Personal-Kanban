@@ -1,17 +1,23 @@
 import { Grid } from "@mui/material";
 import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useCookies } from "react-cookie";
 import Column from "../Column/Column";
 import "./Board.css";
 
 export default function Board() {
-	const [tasks, setTasks] = useState({
-		todo: [
-			{ id: "task1", title: "task with id 1" },
-			{ id: "task3", title: "task with id 3" },
-		],
-		inProgress: [],
-		done: [{ id: "task2", title: "task with id 2" }],
+	const [cookies, setCookie] = useCookies(["Kanban"]);
+	const [tasks, setTasks] = useState(() => {
+		if (!cookies.KanbanData) {
+			return {
+				todo: [],
+				inProgress: [],
+				done: [],
+			};
+        }
+        else {
+            return cookies.KanbanData
+        }
 	});
 
 	const handleDragEnd = ({ destination, source, draggableId }) => {
@@ -30,6 +36,7 @@ export default function Board() {
 		modifieableTasks[destination.droppableId].push(task);
 
 		setTasks(modifieableTasks);
+		setCookie("KanbanData", modifieableTasks);
 	};
 
 	const findItemById = (taskId) => {
